@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="mastermind" EntityNamespace="DataContext" ContextNamespace="DataContext" Class="TeraDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="474ae2b1-3783-4787-99f3-6b418b7fd9a4" Provider="Devart.Data.MySql.Linq.Provider.MySqlDataProvider, Devart.Data.MySql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="User Id=root;Password=apmsetup;Host=localhost;Database=mastermind;Persist Security Info=True" Provider="Devart.Data.MySql" />
+  <Table Name="mastermind.Articles" Member="Articles">
+    <Type Name="Article" ed:Guid="78fcdb05-a0f8-4000-bdec-d224a9f4f125">
+      <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="bc573129-02ab-447c-ad6e-10a5a597e9b2" />
+      <Column Name="CrawledTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="fbb3c46c-26de-481d-b285-906869113641" />
+      <Column Name="Author" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
+      <Column Name="Title" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
+      <Column Name="RawHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="5b255ddd-689b-4e6e-81e7-0519d8c40d63" />
+      <Column Name="ContentHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
+      <Column Name="ArticleWrittenTime" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
+    </Type>
+  </Table>
+  <Table Name="mastermind.Sections" Member="Sections">
+    <Type Name="Section" ed:Guid="e4492dde-4aa5-4b15-98d5-1f60063ce808">
+      <Column Name="SectionId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="dc8d139e-1926-4160-812d-b986692e434a" />
+      <Column Name="Name" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="681c3b24-6724-4919-b70d-528970ea5c47" />
+      <Column Name="Test" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="7fd478d2-79ac-4838-9a3c-151ba95ace36" />
+    </Type>
+  </Table>
+</Database>
