@@ -4,19 +4,38 @@
   <Table Name="mastermind.Articles" Member="Articles">
     <Type Name="Article" ed:Guid="78fcdb05-a0f8-4000-bdec-d224a9f4f125">
       <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="bc573129-02ab-447c-ad6e-10a5a597e9b2" />
-      <Column Name="CrawledTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="fbb3c46c-26de-481d-b285-906869113641" />
-      <Column Name="Author" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
-      <Column Name="Title" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
+      <Column Name="Game" Type="Games" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="f0644bba-e8ca-427c-98eb-7e65952a170d" />
+      <Column Name="TargetSite" Type="TargetSites" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="ae6c175b-f16a-4bb8-aae1-16f8df8759ab" />
+      <Column Name="Link" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b7d326d6-c87c-4b99-87e1-3d68b44c1ec2" />
       <Column Name="RawHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="5b255ddd-689b-4e6e-81e7-0519d8c40d63" />
-      <Column Name="ContentHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
-      <Column Name="ArticleWrittenTime" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
+      <Column Name="CrawledTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="fbb3c46c-26de-481d-b285-906869113641" />
+      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
+      <Column Name="Title" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
+      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
+      <Column Name="ArticleWrittenTime" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
     </Type>
   </Table>
-  <Table Name="mastermind.Sections" Member="Sections">
-    <Type Name="Section" ed:Guid="e4492dde-4aa5-4b15-98d5-1f60063ce808">
-      <Column Name="SectionId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="dc8d139e-1926-4160-812d-b986692e434a" />
-      <Column Name="Name" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="681c3b24-6724-4919-b70d-528970ea5c47" />
-      <Column Name="Test" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="7fd478d2-79ac-4838-9a3c-151ba95ace36" />
+  <Table Name="mastermind.Comments" Member="Comments">
+    <Type Name="Comments" ed:Guid="721947be-d60d-4103-ad0e-b30808145e75">
+      <Column Name="CommentId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="0a2533f9-2e10-4ada-b3d8-807a29b48a38" />
+      <Column Name="ParentCommentId" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="4239d1fa-7682-4a73-8bf1-c157de012906" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="f1e596f4-23d3-48b9-a21d-35229c6836ff" />
+      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="e2880805-4aa7-4e9e-a512-697fe5635332" />
+      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="fbac55ef-34a5-4d02-bc89-6e7c498b0952" />
+      <Column Name="CommentWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="b0590257-2b58-4ecd-b227-bc9b06707cba" />
+      <Column Name="LikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="53afc684-4ffb-476c-88c8-82ad07de3c76" />
+      <Column Name="DislikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="72d28c17-c63d-41ef-8601-3dadfe220ff5" />
+      <Association Name="Article_Comments" ed:AssociationGuid="dcb42ddc-46a2-4c02-9c55-b40b234c2b2c" Member="CommentsToArticle" ed:Guid="cc20778a-dc60-48a3-a026-cce3c094f861" ThisKey="ArticleId" OtherKey="ArticleId" Type="Article" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
+  <EnumType Name="TargetSites" Type="TargetSites" ed:Guid="7f5b696e-f917-4379-8c19-24e2a3b1fa51">
+    <Member Name="hangame" ed:Guid="a3013ec1-7528-469f-983b-a83c5656cb5d" />
+    <Member Name="inven" ed:Guid="3b9de7b8-5627-4c76-9a0c-66a255c3896f" />
+    <Member Name="thisisgame" ed:Guid="91dfea8c-ec98-4ba3-a1e5-3a3465e3d461" />
+    <Member Name="gamemeca" ed:Guid="b9561ec9-af16-4853-bc14-2bdb1f1ca030" />
+    <Member Name="naver" ed:Guid="cf320afc-074d-4f7e-8cb7-334fec1d06bf" />
+  </EnumType>
+  <EnumType Name="Games" Type="Games" ed:Guid="ffa1d404-06b2-4511-9861-235558801bfb">
+    <Member Name="tera" ed:Guid="bd979f9d-ba67-449f-a736-5a4448991a68" />
+  </EnumType>
 </Database>
