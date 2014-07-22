@@ -55,8 +55,9 @@ namespace TeraCrawler.TargetCrawler
 
         public void CollectArticleList()
         {
-            var address = MakePagingPageAddress(1);
-            var pagingArticleList = ParsePagingPage(address.CrawlIt(Encoding.UTF8)).ToList();
+            var pageNo = 1;
+            var address = MakePagingPageAddress(pageNo);
+            var pagingArticleList = ParsePagingPage(address.CrawlIt(Encoding.UTF8), pageNo).ToList();
         }
 
         public bool IsWorking()
@@ -77,19 +78,28 @@ namespace TeraCrawler.TargetCrawler
             {
                 var articleId = ArticleQueueToCrawl.Dequeue();
                 var address = MakeArticlePageAddress(articleId);
-                var article = ParseArticlePage(address.CrawlIt(Encoding.UTF8));
 
-                using (var context = new TeraDataContext())
+                try
                 {
-                    context.Articles.InsertOnSubmit(article);
-                    context.SubmitChanges();
+                    var article = ParseArticlePage(address.CrawlIt(Encoding.UTF8), articleId);
+                    using (var context = new TeraDataContext())
+                    {
+                        context.Articles.InsertOnSubmit(article);
+                        context.SubmitChanges();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Logger.Log("Error occurred ArticleID: {0}, Link: {1}", articleId, address);
+                    Logger.Log(ex);
+                }
+
             }
         }
 
-        public abstract Article ParseArticlePage(string rawHtml);
+        public abstract Article ParseArticlePage(string rawHtml, int articleId);
         
-        public abstract IEnumerable<Article> ParsePagingPage(string rawHtml);
+        public abstract IEnumerable<Article> ParsePagingPage(string rawHtml, int pageNo);
         
         protected abstract string MakePagingPageAddress(int pageNo);
 

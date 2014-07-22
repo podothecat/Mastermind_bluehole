@@ -12,7 +12,7 @@
       <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
       <Column Name="Title" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
       <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
-      <Column Name="ArticleWrittenTime" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
+      <Column Name="ArticleWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
     </Type>
   </Table>
   <Table Name="mastermind.Comments" Member="Comments">
@@ -28,6 +28,14 @@
       <Association Name="Article_Comments" ed:AssociationGuid="dcb42ddc-46a2-4c02-9c55-b40b234c2b2c" Member="CommentsToArticle" ed:Guid="cc20778a-dc60-48a3-a026-cce3c094f861" ThisKey="ArticleId" OtherKey="ArticleId" Type="Article" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="mastermind.Logs" Member="Logs">
+    <Type Name="Log" ed:Guid="78b4e059-c3f4-4644-b17e-86b41802e9ec">
+      <Column Name="LogId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="eab5d548-a1df-4cd6-8046-ab2870955948" />
+      <Column Name="`TimeStamp`" Member="TimeStamp" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="8f922800-1e98-444e-af01-730e30290ce4" />
+      <Column Name="LogType" Type="LogType" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="ab442243-6e6c-4c2b-981a-9b088693869a" />
+      <Column Name="Message" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b1680683-b77b-4f22-b2d4-9f7d5bb83b91" />
+    </Type>
+  </Table>
   <EnumType Name="TargetSites" Type="TargetSites" ed:Guid="7f5b696e-f917-4379-8c19-24e2a3b1fa51">
     <Member Name="hangame" ed:Guid="a3013ec1-7528-469f-983b-a83c5656cb5d" />
     <Member Name="inven" ed:Guid="3b9de7b8-5627-4c76-9a0c-66a255c3896f" />
@@ -37,5 +45,9 @@
   </EnumType>
   <EnumType Name="Games" Type="Games" ed:Guid="ffa1d404-06b2-4511-9861-235558801bfb">
     <Member Name="tera" ed:Guid="bd979f9d-ba67-449f-a736-5a4448991a68" />
+  </EnumType>
+  <EnumType Name="LogType" Type="LogType" ed:Guid="e28f0ec7-99f9-4664-9eff-5179544cdbea">
+    <Member Name="Info" ed:Guid="47074490-2182-4ca4-bf02-b18788560ef5" />
+    <Member Name="Exception" ed:Guid="322a188a-609c-4e43-b24e-8677f3b2e5f0" />
   </EnumType>
 </Database>
