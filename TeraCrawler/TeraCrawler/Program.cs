@@ -31,8 +31,15 @@ namespace TeraCrawler
             var crawler = Crawler.Get(targetSite, categoryId);
             while(true)
             {
-                crawler.CollectArticleList();
-                crawler.CrawlArticles();
+                try
+                {
+                    crawler.CollectArticleList();
+                    crawler.CrawlArticles();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex);
+                }
 
                 Thread.Sleep(5000);
             }

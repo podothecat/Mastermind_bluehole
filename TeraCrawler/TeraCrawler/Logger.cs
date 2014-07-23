@@ -16,16 +16,23 @@ namespace TeraCrawler
 
         public static void Log(Exception ex)
         {
-            Log(LogType.Exception, ex.Message);
-            Log(LogType.Exception, ex.StackTrace);
-            Log(LogType.Exception, ex.Source);
+            var message = string.Format("{1}{0}{2}{0}{3}",
+                Environment.NewLine,
+                ex.Message,
+                ex.StackTrace ?? "",
+                ex.Source ?? "");
+            Log(LogType.Exception, message);
 
             if (ex.InnerException != null) Log(ex.InnerException);
         }
 
         private static void Log(LogType logType, string message)
         {
-            if (message == null) return;
+            if (message == null)
+            {
+                Console.WriteLine("[Warning] Log message is null");
+                return;
+            }
 
             var timeStamp = DateTime.Now;
             var formattedMessage = string.Format("[{0}] {1}", timeStamp.ToString("HH:mm:ss"), message);
