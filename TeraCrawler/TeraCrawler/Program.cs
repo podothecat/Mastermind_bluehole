@@ -13,30 +13,26 @@ namespace TeraCrawler
     {
         static void Main(string[] args)
         {
-            // TeraCrawler.exe [Target Site] [Begin Date] [End Date]
+            // TeraCrawler.exe [Game] [Target Site] [Category ID]
             if (args.Length != 3)
             {
                 Logger.Log("Invalid execution parameters.");
-                Logger.Log("TeraCrawler.exe [Target Site] [Category ID] [Begin Date] [End Date]");
-                var targetSiteList = Enum.GetValues(typeof (TargetSites)).OfType<TargetSites>().ToList();
-                Logger.Log("[Target Site] must be one of ({0})/", string.Join(",", targetSiteList));
-                Logger.Log("[Begin Date] includes begin date - closed interval");
-                Logger.Log("[End Date] excludes end date - opened interval");
+                Logger.Log("TeraCrawler.exe [Game] [Target Site] [Category ID]");
+                Logger.Log("[Game] must be one of ({0})", string.Join(", ", Enum.GetValues(typeof (Games)).OfType<Games>()));
+                Logger.Log("[Target Site] must be one of ({0})", string.Join(", ", Enum.GetValues(typeof (TargetSites)).OfType<TargetSites>()));
 
                 return;
             }
 
-            var targetSite = (TargetSites)Enum.Parse(typeof (TargetSites), args[0]);
-            var categoryId = int.Parse(args[1]);
-            var beginDate = DateTime.Parse(args[2]);
-            var endDate = DateTime.Parse(args[3]);
+            var game = (Games)Enum.Parse(typeof (Games), args[0]);
+            var targetSite = (TargetSites)Enum.Parse(typeof (TargetSites), args[1]);
+            var categoryId = int.Parse(args[2]);
 
-            var crawler = Crawler.Get(targetSite, categoryId, beginDate, endDate);
-            crawler.CollectArticleList();
-            while (crawler.IsWorking())
+            var crawler = Crawler.Get(targetSite, categoryId);
+            while(true)
             {
-                crawler.CrawlArticles();
                 crawler.CollectArticleList();
+                crawler.CrawlArticles();
 
                 Thread.Sleep(5000);
             }

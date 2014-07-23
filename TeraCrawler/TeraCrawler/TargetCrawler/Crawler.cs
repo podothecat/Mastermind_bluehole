@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 using DataContext;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,15 @@ namespace TeraCrawler.TargetCrawler
 {
     public abstract class Crawler
     {
+        internal Games GameType { get; set; }
+        internal TargetSites TargetSite { get; set; }
         internal int CategoryId { get; set; }
-        internal DateTime BeginDate { get; set; }
-        internal DateTime EndDate { get; set; }
 
-        internal Queue<int> ArticleQueueToCrawl = new Queue<int>();
+        internal int CurrentWorkingPage = 1;
+        internal ConcurrentQueue<Article> ArticleQueueToCrawl = new ConcurrentQueue<Article>();
 
         #region Generate
-        public static Crawler Get(TargetSites target, int categoryId, DateTime beginDate, DateTime endDate)
+        public static Crawler Get(TargetSites target, int categoryId)
         {
             Crawler crawler = null;
 
@@ -45,8 +47,6 @@ namespace TeraCrawler.TargetCrawler
                     throw new Exception("Invalid TargetSite parameter");
             }
 
-            crawler.BeginDate = beginDate;
-            crawler.EndDate = endDate;
             crawler.CategoryId = categoryId;
 
             return crawler;
@@ -55,55 +55,81 @@ namespace TeraCrawler.TargetCrawler
 
         public void CollectArticleList()
         {
-            var pageNo = 1;
-            var address = MakePagingPageAddress(pageNo);
-            var pagingArticleList = ParsePagingPage(address.CrawlIt(Encoding.UTF8), pageNo).ToList();
-        }
+            using (var context = new TeraDataContext())
+            {
+                var jumpPagingSize = 1;
+                var address = MakePagingPageAddress(CurrentWorkingPage);
+                foreach (var article in ParsePagingPage(address.CrawlIt(Encoding.UTF8)))
+                {
+                    try
+                    {
+                        // 문제가 있당... 큰일이당... 이를 우짜누...
+                        // 우짜긴 배째 ㄱ=
+                        if (article.ArticleId == 0) continue;
 
-        public bool IsWorking()
-        {
-            // 대상 일자가 현재 시간보다 뒤라면 계속 수집
-            if (DateTime.Now < EndDate)
-                return true;
+                        // 기존 데이터가 존재하는지 확인한 후 페이지 건너뛰기
+                        if (context.Articles.Any(e => e.ArticleId == article.ArticleId))
+                        {
+                            var prevArticleCount = context.Articles.Count(e => e.ArticleId < article.ArticleId);
+                            jumpPagingSize = prevArticleCount / PagingSize();
 
-            if (ArticleQueueToCrawl.Count > 0)
-                return true;
+                            continue;
+                        }
+                        else
+                        {
+                            jumpPagingSize = 1;
+                        }
 
-            return false;
+                        ArticleQueueToCrawl.Enqueue(article);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Error occurred during CollectArticleList for ArticleID: {0} and Link: {1}", article.ArticleId, article.Link);
+                        Logger.Log(ex);
+                    }
+                }
+
+                CurrentWorkingPage += Math.Max(1, jumpPagingSize);
+            }
         }
 
         public void CrawlArticles()
         {
             while (ArticleQueueToCrawl.Count > 0)
             {
-                var articleId = ArticleQueueToCrawl.Dequeue();
-                var address = MakeArticlePageAddress(articleId);
-
-                try
+                ThreadPool.QueueUserWorkItem(item =>
                 {
-                    var article = ParseArticlePage(address.CrawlIt(Encoding.UTF8), articleId);
-                    using (var context = new TeraDataContext())
+                    Article article = null;
+                    while (!ArticleQueueToCrawl.TryDequeue(out article)) {}
+                    
+                    try
                     {
-                        context.Articles.InsertOnSubmit(article);
-                        context.SubmitChanges();
+                        var address = MakeArticlePageAddress(article.ArticleId);
+                        article.RawHtml = address.CrawlIt(Encoding.GetEncoding(51949));
+                        ParseArticlePage(article);
+                        using (var context = new TeraDataContext())
+                        {
+                            context.Articles.InsertOnSubmit(article);
+                            context.SubmitChanges();
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log("Error occurred ArticleID: {0}, Link: {1}", articleId, address);
-                    Logger.Log(ex);
-                }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Error occurred ArticleID: {0}, Link: {1}", article.ArticleId, article.Link);
+                        Logger.Log(ex);
+                    }
 
+                }, ArticleQueueToCrawl);
             }
         }
 
-        public abstract Article ParseArticlePage(string rawHtml, int articleId);
-        
-        public abstract IEnumerable<Article> ParsePagingPage(string rawHtml, int pageNo);
-        
+        protected abstract int PagingSize();
         protected abstract string MakePagingPageAddress(int pageNo);
-
+        public abstract IEnumerable<Article> ParsePagingPage(string rawHtml);
+        
         protected abstract string MakeArticlePageAddress(int articleId);
+        public abstract void ParseArticlePage(Article article);
+        
     }
 
     public static class CrawlHelper
@@ -132,7 +158,7 @@ namespace TeraCrawler.TargetCrawler
                 }
                 catch (WebException ex)
                 {
-                    Logger.Log(new Exception(url));
+                    Logger.Log(new Exception(url) { Source = ex.Source });
                     Logger.Log(ex);
                     tryCount++;
 

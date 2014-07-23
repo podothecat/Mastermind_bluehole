@@ -25,6 +25,8 @@ namespace TeraCrawler
 
         private static void Log(LogType logType, string message)
         {
+            if (message == null) return;
+
             var timeStamp = DateTime.Now;
             var formattedMessage = string.Format("[{0}] {1}", timeStamp.ToString("HH:mm:ss"), message);
             Console.WriteLine(formattedMessage);

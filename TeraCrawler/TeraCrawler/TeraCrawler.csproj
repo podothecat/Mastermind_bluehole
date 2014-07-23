@@ -63,7 +63,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="TeraArticleContext.Diagram1.view">
+    <None Include="TeraArticleContext.TeraDataDiagram.view">
       <DependentUpon>TeraArticleContext.lqml</DependentUpon>
     </None>
     <None Include="TeraArticleContext.edps">

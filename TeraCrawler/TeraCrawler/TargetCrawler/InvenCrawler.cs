@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using DataContext;
@@ -10,23 +11,13 @@ namespace TeraCrawler.TargetCrawler
 {
     public class InvenCrawler : Crawler
     {
-        public override Article ParseArticlePage(string rawHtml, int articleId)
+        public override void ParseArticlePage(Article article)
         {
             var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(rawHtml);
-
-            var article = new Article
-            {
-                Game = Games.tera,
-                TargetSite = TargetSites.inven,
-                Link = MakeArticlePageAddress(articleId),
-                CrawledTime = DateTime.Now,
-                RawHtml = rawHtml,
-            };
+            htmlDoc.LoadHtml(article.RawHtml);
 
             // 본문이 삭제된 경우
-            if (htmlDoc.DocumentNode.ChildNodes.Count == 1)
-                return article;
+            if (htmlDoc.DocumentNode.ChildNodes.Count == 1) return;
 
             var articleWriterNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='articleWriter']/span");
             article.Author = articleWriterNode.Attributes["onclick"].Value.Replace("layerNickName('", "").Replace("','pbNickNameHandler')", "");
@@ -41,28 +32,37 @@ namespace TeraCrawler.TargetCrawler
 
             var articleContentNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='powerbbsContent']");
             article.ContentHtml = articleContentNode.InnerHtml;
-
-            return article;
         }
 
 
-        public override IEnumerable<Article> ParsePagingPage(string rawHtml, int pageNo)
+        public override IEnumerable<Article> ParsePagingPage(string rawHtml)
         {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(rawHtml);
 
-            foreach (var articleListTableNode in htmlDoc.DocumentNode.SelectNodes("//table[@width='710']").Skip(3))
+            foreach (var articleNode in htmlDoc.DocumentNode.SelectNodes("//tr[@height=28 and @bgcolor='white']"))
             {
-                var textList = articleListTableNode.SelectNodes("//td[@align='center']").Select(e => e.InnerText.Trim()).Where(e => e.Length > 0);
-                var lastArticleId = int.Parse(textList.ElementAt(1));
+                var link = articleNode.SelectSingleNode("td[@class='bbsSubject']").SelectSingleNode("a").Attributes["href"].Value;
+                const string token = "=&l=";
+                var articleId = int.Parse(link.Substring(link.LastIndexOf(token) + token.Length));
 
-                yield return new Article
+                var article = new Article
                 {
-
+                    Game = Games.tera,
+                    TargetSite = TargetSites.inven,
+                    CategoryId = CategoryId,
+                    ArticleId = articleId,
+                    Link = link,
+                    Author = articleNode.SelectSingleNode("td[@align='left']").InnerText.Trim(),
                 };
-            }
 
-            throw new NotImplementedException();
+                yield return article;
+            }
+        }
+
+        protected override int PagingSize()
+        {
+            return 50;
         }
 
         protected override string MakePagingPageAddress(int pageNo)
