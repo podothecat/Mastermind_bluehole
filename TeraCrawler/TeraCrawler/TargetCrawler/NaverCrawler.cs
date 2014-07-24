@@ -93,7 +93,7 @@ namespace TeraCrawler.TargetCrawler
 
             var articleContentNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='powerbbsContent']");
             article.ContentHtml = articleContentNode.InnerHtml;
-             * /
+             */
         }
 
 
