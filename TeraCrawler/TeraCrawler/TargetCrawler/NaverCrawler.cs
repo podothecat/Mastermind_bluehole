@@ -135,9 +135,9 @@ namespace TeraCrawler.TargetCrawler
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(rawHtml);
 
-            foreach (var articleNode in htmlDoc.DocumentNode.SelectNodes("//*[@id=\"article_lst_section\"]/ul[2]/li[1]/a"))
+            foreach (var articleNode in htmlDoc.DocumentNode.SelectNodes("//*[@id=\"article_lst_section\"]/ul[2]/li"))
             {
-                var link = String.Format("http://m.cafe.naver.com/{0}",articleNode.Attributes["href"].Value);
+                var link = String.Format("http://m.cafe.naver.com/{0}",articleNode.SelectSingleNode("a").Attributes["href"].Value);
 
                 var match = new Regex("articleid=(?<articleid>[0-9]+)").Match(link);
 
@@ -162,7 +162,7 @@ namespace TeraCrawler.TargetCrawler
 
         protected override int PagingSize()
         {
-            return 50;
+            return 20;
         }
 
         protected override string MakePagingPageAddress(int pageNo)
