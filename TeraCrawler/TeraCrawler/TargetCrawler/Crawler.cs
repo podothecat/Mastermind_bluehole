@@ -38,7 +38,7 @@ namespace TeraCrawler.TargetCrawler
                     crawler = new InvenCrawler();
                     break;
                 case TargetSites.naver:
-                    //crawler = new NaverCrawler();
+                    crawler = new NaverCrawler();
                     break;
                 case TargetSites.thisisgame:
                     //crawler = new ThisIsGameCrawler();
