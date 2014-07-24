@@ -17,6 +17,9 @@ namespace TeraCrawler.TargetCrawler
         internal Games GameType { get; set; }
         internal TargetSites TargetSite { get; set; }
         internal int CategoryId { get; set; }
+        internal CookieContainer cookieContainer { get; set; }
+        internal Encoding encoding = Encoding.UTF8;
+
 
         internal int CurrentWorkingPage = 1;
         internal ConcurrentQueue<Article> ArticleQueueToCrawl = new ConcurrentQueue<Article>();
@@ -59,7 +62,7 @@ namespace TeraCrawler.TargetCrawler
             {
                 var jumpPagingSize = 1;
                 var address = MakePagingPageAddress(CurrentWorkingPage);
-                foreach (var article in ParsePagingPage(address.CrawlIt(Encoding.UTF8)))
+                foreach (var article in ParsePagingPage(address.CrawlIt(Encoding.UTF8, cookieContainer)))
                 {
                     try
                     {
@@ -105,7 +108,7 @@ namespace TeraCrawler.TargetCrawler
                     try
                     {
                         var address = MakeArticlePageAddress(article.ArticleId);
-                        article.RawHtml = address.CrawlIt(Encoding.GetEncoding(51949));
+                        article.RawHtml = address.CrawlIt(encoding, cookieContainer);
                         ParseArticlePage(article);
                         using (var context = new TeraDataContext())
                         {
@@ -134,7 +137,7 @@ namespace TeraCrawler.TargetCrawler
 
     public static class CrawlHelper
     {
-        public static string CrawlIt(this string url, Encoding encoding, int timeout = 3000)
+        public static string CrawlIt(this string url, Encoding encoding, CookieContainer cookieContainer = null, int timeout = 3000)
         {
             var tryCount = 0;
             while (true)
@@ -143,7 +146,7 @@ namespace TeraCrawler.TargetCrawler
                 {
                     var webRequest = (HttpWebRequest)WebRequest.Create(url);
                     webRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)";
-                    webRequest.CookieContainer = new CookieContainer();
+                    webRequest.CookieContainer = cookieContainer == null ? new CookieContainer() : cookieContainer;
                     webRequest.AllowAutoRedirect = true;
                     webRequest.Timeout = timeout;
 

@@ -27,7 +27,6 @@
       <Column Name="CommentWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="b0590257-2b58-4ecd-b227-bc9b06707cba" />
       <Column Name="LikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="53afc684-4ffb-476c-88c8-82ad07de3c76" />
       <Column Name="DislikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="72d28c17-c63d-41ef-8601-3dadfe220ff5" />
-      <Association Name="Article_Comments" ed:AssociationGuid="dcb42ddc-46a2-4c02-9c55-b40b234c2b2c" Member="CommentsToArticle" ed:Guid="cc20778a-dc60-48a3-a026-cce3c094f861" ThisKey="ArticleId" OtherKey="ArticleId" Type="Article" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="mastermind.Logs" Member="Logs">

@@ -11,6 +11,11 @@ namespace TeraCrawler.TargetCrawler
 {
     public class InvenCrawler : Crawler
     {
+        public InvenCrawler()
+        {
+            encoding = Encoding.GetEncoding(51949);
+        }
+
         public override void ParseArticlePage(Article article)
         {
             var htmlDoc = new HtmlDocument();

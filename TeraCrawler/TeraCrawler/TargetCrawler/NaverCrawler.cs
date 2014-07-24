@@ -9,6 +9,8 @@ using OpenQA.Selenium.Chrome;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TeraCrawler.TargetCrawler
 {
@@ -41,9 +43,18 @@ namespace TeraCrawler.TargetCrawler
 
         public NaverCrawler()
         {
+            var processList = Process.GetProcessesByName("chromedriver");
+            foreach( var process in processList )
+            {
+                process.Kill();
+            }
+
+            var chromeDriverService = ChromeDriverService.CreateDefaultService();
+            chromeDriverService.HideCommandPromptWindow = true;
+
             var option = new ChromeOptions();
             option.AddExtension("3.7_0.crx");
-            driver = new ChromeDriver(option);
+            driver = new ChromeDriver(chromeDriverService, option ); 
 
             while ( driver.WindowHandles.Count < 2 )
             {
@@ -68,32 +79,54 @@ namespace TeraCrawler.TargetCrawler
             driver.FindElementByCssSelector("#pw").SendKeys(password);
 
             driver.FindElementByCssSelector("input.int_jogin").Click();
+
+            cookieContainer = new CookieContainer();
+            ReadOnlyCollection<OpenQA.Selenium.Cookie> cookieCollections = null; 
+
+            bool sessionFound = false;
+            while (!sessionFound)
+            {
+                cookieCollections = driver.Manage().Cookies.AllCookies;
+                foreach( var cookie in cookieCollections )
+                {
+                    if ( cookie.Name == "JSESSIONID" )
+                    {
+                        sessionFound = true;
+                        break;
+                    }
+                }
+            }
+            foreach( var cookie in cookieCollections )
+            {
+                cookieContainer.Add(new System.Net.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
+            }
         }
 
         public override void ParseArticlePage(Article article)
         {
-            throw NotImplementedException();
-            /*
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
+
             htmlDoc.LoadHtml(article.RawHtml);
 
             // 본문이 삭제된 경우
             if (htmlDoc.DocumentNode.ChildNodes.Count == 1) return;
 
-            var articleWriterNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='articleWriter']/span");
-            article.Author = articleWriterNode.Attributes["onclick"].Value.Replace("layerNickName('", "").Replace("','pbNickNameHandler')", "");
+            article.Author = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"ct\"]/div[1]/p/span/em/a[1]")[0].InnerHtml.Trim();
 
-            var writtenTimeNode =
-                htmlDoc.DocumentNode.SelectSingleNode("//div[@class='articleInfo']/div[@class='articleDate']");
-            article.ArticleWrittenTime = DateTime.Parse(writtenTimeNode.InnerText);
+            var writtenTimeNode = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"ct\"]/div[1]/p/span/span[1]/text()");
+            foreach( var node in writtenTimeNode )
+            {
+                var text = node.InnerHtml.Trim();
+                if (text.Length > 0)
+                {
+                    article.ArticleWrittenTime = DateTime.Parse(text);
+                    break;
+                }
+            }
 
-            var articleTitleNode =
-                htmlDoc.DocumentNode.SelectSingleNode("//div[@class='articleSubject ']/div[@class='articleTitle']/h1");
-            article.Title = articleTitleNode.InnerText;
+            article.Title = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"ct\"]/div[1]/h2")[0].InnerHtml.Trim();
 
-            var articleContentNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='powerbbsContent']");
-            article.ContentHtml = articleContentNode.InnerHtml;
-             */
+            article.ContentHtml = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"postContent\"]")[0].InnerHtml.Trim();          
         }
 
 
@@ -108,7 +141,11 @@ namespace TeraCrawler.TargetCrawler
 
                 var match = new Regex("articleid=(?<articleid>[0-9]+)").Match(link);
 
-                var articleId = int.Parse(match.Groups["articleid"].Value);
+                int articleId = 0;
+                if (!int.TryParse(match.Groups["articleid"].Value, out articleId))
+                {
+                    continue;
+                }               
 
                 var article = new Article
                 {
