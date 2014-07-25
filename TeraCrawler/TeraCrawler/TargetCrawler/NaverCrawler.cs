@@ -11,6 +11,7 @@ using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace TeraCrawler.TargetCrawler
 {
@@ -18,11 +19,7 @@ namespace TeraCrawler.TargetCrawler
     public class NaverCrawler : Crawler
     {
         // 네이버에 로그인하기 위한 임시 아이디를 만들었습니다
-        // id: podothecat@naver.com
-        // password: Bluehole!
-
-        private const string id = "podothecat";
-        private const string password = "Bluehole!";
+        // configuration에서 설정하십시오
 
         private const string cafeUrl = "http://m.cafe.naver.com/sd92";
         private const string loginReqUrl = "https://nid.naver.com/nidlogin.login";
@@ -43,6 +40,8 @@ namespace TeraCrawler.TargetCrawler
 
         public NaverCrawler()
         {
+            string id = ConfigurationManager.AppSettings["id"];
+            string password = ConfigurationManager.AppSettings["password"];
             var processList = Process.GetProcessesByName("chromedriver");
             foreach( var process in processList )
             {
@@ -100,6 +99,8 @@ namespace TeraCrawler.TargetCrawler
             {
                 cookieContainer.Add(new System.Net.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
             }
+
+            driver.Quit();
         }
 
         public override void ParseArticlePage(Article article)
