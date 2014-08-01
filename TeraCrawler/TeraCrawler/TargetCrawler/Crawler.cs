@@ -18,6 +18,7 @@ namespace TeraCrawler.TargetCrawler
         internal TargetSites TargetSite { get; set; }
         internal int CategoryId { get; set; }
         internal CookieContainer cookieContainer { get; set; }
+        internal WebHeaderCollection headerCollection { get; set; }
         internal Encoding encoding = Encoding.UTF8;
 
 
@@ -62,7 +63,7 @@ namespace TeraCrawler.TargetCrawler
             {
                 var jumpPagingSize = 1;
                 var address = MakePagingPageAddress(CurrentWorkingPage);
-                foreach (var article in ParsePagingPage(address.CrawlIt(Encoding.UTF8, cookieContainer)))
+                foreach (var article in ParsePagingPage(address.CrawlIt(Encoding.UTF8)))
                 {
                     try
                     {
@@ -103,16 +104,27 @@ namespace TeraCrawler.TargetCrawler
                 ThreadPool.QueueUserWorkItem(item =>
                 {
                     Article article = null;
+                    IList<Comment> comments = null;
                     while (!ArticleQueueToCrawl.TryDequeue(out article)) {}
                     
                     try
                     {
+                        comments = new List<Comment>();
+
                         var address = MakeArticlePageAddress(article.ArticleId);
-                        article.RawHtml = address.CrawlIt(encoding, cookieContainer);
+                        article.RawHtml = address.CrawlIt(encoding, headerCollection, cookieContainer);
                         ParseArticlePage(article);
+
+                        var commentPages = MakeCommentPageAddresses(article);
+
+                        foreach (var commentPage in commentPages) {
+                            ParseCommentPage(commentPage.CrawlIt(encoding,headerCollection,cookieContainer), ref comments);
+                        }
+
                         using (var context = new TeraDataContext())
                         {
                             context.Articles.InsertOnSubmit(article);
+                            context.Comments.InsertAllOnSubmit(comments);
                             context.SubmitChanges();
                         }
                     }
@@ -133,11 +145,16 @@ namespace TeraCrawler.TargetCrawler
         protected abstract string MakeArticlePageAddress(int articleId);
         public abstract void ParseArticlePage(Article article);
         
+        // article의 rawHtml으로부터 댓글 요청하는 페이지 주소를 가져온다. 별도로 ajax를 쓰거나 하지 않는다면  article의 주소를 그대로 넣어도 되겠지
+        protected abstract IEnumerable<String> MakeCommentPageAddresses(Article article);
+        // MakeCommentPageAddresses에서 가져온 주소를 요청하여 그 페이지에 있는 comment를 파싱해 ref comments로 리턴하면 된다.
+        public abstract void ParseCommentPage(String commentPageRawHtml, ref IList<Comment> comments);
+        
     }
 
     public static class CrawlHelper
     {
-        public static string CrawlIt(this string url, Encoding encoding, CookieContainer cookieContainer = null, int timeout = 3000)
+        public static string CrawlIt(this string url, Encoding encoding, WebHeaderCollection headers = null, CookieContainer cookieContainer = null, int timeout = 3000)
         {
             var tryCount = 0;
             while (true)
@@ -147,6 +164,24 @@ namespace TeraCrawler.TargetCrawler
                     var webRequest = (HttpWebRequest)WebRequest.Create(url);
                     webRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)";
                     webRequest.CookieContainer = cookieContainer == null ? new CookieContainer() : cookieContainer;
+                    
+                    if ( headers != null )
+                    {
+                        foreach( String key in headers.Keys )
+                        { 
+                            switch ( key )
+                            {
+                                // referer는 Header 컬렉션에 포함되지 않고 별도로 취급되므로 따로 빼놓기.
+                                case "Referer":
+                                    webRequest.Referer = headers.Get(key);
+                                    break;
+                                default:
+                                    webRequest.Headers.Set(key, headers.Get(key));
+                                    break;
+                            }
+                        }
+                    }
+                    
                     webRequest.AllowAutoRedirect = true;
                     webRequest.Timeout = timeout;
 

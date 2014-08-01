@@ -26,6 +26,8 @@ namespace TeraCrawler.TargetCrawler
         private const string loginFormUrl = loginReqUrl + "?&url=http://m.cafe.naver.com/sd92";
         private const string categoryUrl = "http://m.cafe.naver.com/ArticleList.nhn?search.boardtype=L&search.menuid={0}&search.questionTab=A&search.clubid=13518432&search.totalCount=201&search.page={1}";
         private const string articlUrl = "http://m.cafe.naver.com/ArticleRead.nhn?clubid=13518432&articleid={1}&page=1&boardtype=L&menuid={0}";
+        private const string commentUrl = "http://m.cafe.naver.com/CommentView.nhn?search.clubid=13518432&search.articleid={0}&page={1}&sc=";
+        
         // 각종 상수들
 
         // 카테고리Id ( menuid라는 파라미터로 전송됨 )
@@ -174,6 +176,45 @@ namespace TeraCrawler.TargetCrawler
         protected override string MakeArticlePageAddress(int articleId)
         {
             return string.Format(articlUrl, CategoryId, articleId);
+        }
+
+        protected override IEnumerable<string> MakeCommentPageAddresses(Article article)
+        {
+            List<String> listCommentPageAddress = new List<string>();
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(article.RawHtml);
+            foreach( var node in htmlDoc.DocumentNode.SelectNodes("//*[@id=\"ct\"]/div[8]/ul/li[1]/a/span/em") )
+            {
+                int commentCount = Int32.Parse(node.InnerText);
+                // 네이버는 100개가 한 페이지
+                int pageCount = commentCount / 100 + 1;
+                for ( int i = 1 ; i < pageCount + 1 ; ++i)
+                listCommentPageAddress.Add(String.Format(commentUrl, article.ArticleId, i));
+            }            
+            return listCommentPageAddress;
+        }
+
+        public override void ParseCommentPage(string commentPageRawHtml, ref IList<Comment> comments)
+        {
+            var comment = new Comment();
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(commentPageRawHtml);
+
+            foreach (var node in htmlDoc.DocumentNode.SelectNodes("//*[@id=\"ct\"]/ul"))
+            {
+                // node로부터.
+                // li[1]/div/strong/a[1]       이름
+                // li[1]/div/strong/em         시간
+                // li[1]/div/div[2]/span       내용
+                // 댓글의 댓글은 re
+                // 댓글의 댓글의 댓글부터는 re2
+                if (node.SelectNodes("li[1]/div/strong/a[1]") != null) { 
+                    comment.Author = node.SelectNodes("li[1]/div/strong/a[1]")[0].InnerText;
+                    comment.CommentWrittenTime = DateTime.Parse(node.SelectNodes("li[1]/div/strong/em")[0].InnerText);
+                    comment.ContentHtml = node.SelectNodes("li[1]/div/div[2]/span")[0].InnerText;
+                    comments.Add(comment);
+                }
+            }            
         }
     }
 }

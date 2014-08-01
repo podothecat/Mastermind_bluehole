@@ -79,5 +79,15 @@ namespace TeraCrawler.TargetCrawler
         {
             return string.Format("http://www.inven.co.kr/board/powerbbs.php?come_idx={0}&l={1}", CategoryId, articleId);
         }
+
+        protected override IEnumerable<string> MakeCommentPageAddresses(Article article)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ParseCommentPage(string commentPage, ref IList<Comment> comments)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
