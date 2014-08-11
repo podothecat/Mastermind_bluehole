@@ -228,7 +228,7 @@ namespace TeraCrawler.TargetCrawler
 
             foreach (var comment in comments)
             {
-                comment.ArticleId = article.ArticleAutoId;
+                comment.ArticleAutoId = article.ArticleAutoId;
             }
 
             return comments;

@@ -117,7 +117,7 @@ namespace TeraCrawler.TargetCrawler
                         comments.Add(new Comment {
                             CommentId = int.Parse(commentItem.Attribute("cmtidx").Value),
                             ParentCommentId = int.Parse(commentItem.Attribute("cmtpidx").Value),
-                            ArticleId = article.ArticleAutoId,
+                            ArticleAutoId = article.ArticleAutoId,
                             Author = commentItem.XPathSelectElement("o_name").Value,
                             ContentHtml = commentItem.XPathSelectElement("o_comment").Value,
                             CommentWrittenTime = DateTime.Now, 

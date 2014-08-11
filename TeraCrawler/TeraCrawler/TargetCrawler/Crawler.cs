@@ -118,7 +118,6 @@ namespace TeraCrawler.TargetCrawler
                         ParseArticlePage(article);
                         using (var context = new TeraDataContext())
                         {
-                            Console.WriteLine(context.Connection.ConnectionString);
                             context.Articles.InsertOnSubmit(article);
                             context.SubmitChanges();
                         }
