@@ -4,8 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 using DataContext;
 using HtmlAgilityPack;
+using System.Net;
+using System.IO;
+using System.Xml.Linq;
 
 namespace TeraCrawler.TargetCrawler
 {
@@ -38,7 +42,6 @@ namespace TeraCrawler.TargetCrawler
             var articleContentNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='powerbbsContent']");
             article.ContentHtml = articleContentNode.InnerHtml;
         }
-
 
         public override IEnumerable<Article> ParsePagingPage(string rawHtml)
         {
@@ -88,6 +91,44 @@ namespace TeraCrawler.TargetCrawler
         public override void ParseCommentPage(string commentPage, ref IList<Comment> comments)
         {
             throw new NotImplementedException();
+        }
+
+        protected override IList<Comment> CrawlComments(Article article)
+        {
+            IList<Comment> comments = new List<Comment>();
+
+            var dummy = (long)(DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            var client = (HttpWebRequest)WebRequest.Create(string.Format("http://www.inven.co.kr/common/board/comment.xml.php?dummy={0}", dummy));
+            {
+                client.ContentType = "application/x-www-form-urlencoded";
+                client.Headers.Add("charset", "UTF-8");
+
+                client.Method = "POST";
+                using (var writer = new StreamWriter(client.GetRequestStream()))
+                {
+                    writer.Write(string.Format(@"comeidx={0}&articlecode={1}", article.CategoryId, article.ArticleId));
+                }
+
+                using (var reader = new StreamReader(client.GetResponse().GetResponseStream()))
+                {
+                    var commentXDoc = XDocument.Parse(reader.ReadToEnd());
+                    foreach (var commentItem in commentXDoc.XPathSelectElements("//resultdata/commentlist/item"))
+                    {
+                        comments.Add(new Comment {
+                            CommentId = int.Parse(commentItem.Attribute("cmtidx").Value),
+                            ParentCommentId = int.Parse(commentItem.Attribute("cmtpidx").Value),
+                            ArticleId = article.ArticleAutoId,
+                            Author = commentItem.XPathSelectElement("o_name").Value,
+                            ContentHtml = commentItem.XPathSelectElement("o_comment").Value,
+                            CommentWrittenTime = DateTime.Now, 
+                            LikeCount = int.Parse(commentItem.XPathSelectElement("o_recommend").Value),
+                            DislikeCount = int.Parse(commentItem.XPathSelectElement("o_notrecommend").Value),
+                        });
+                    }
+                }
+            }
+
+            return comments;
         }
     }
 }

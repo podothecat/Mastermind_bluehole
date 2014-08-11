@@ -19,7 +19,8 @@
   </Table>
   <Table Name="mastermind.Comments" Member="Comments">
     <Type Name="Comment" ed:Guid="721947be-d60d-4103-ad0e-b30808145e75">
-      <Column Name="CommentId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="0a2533f9-2e10-4ada-b3d8-807a29b48a38" />
+      <Column Name="CommentAutoId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="0a2533f9-2e10-4ada-b3d8-807a29b48a38" />
+      <Column Name="CommentId" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="e4b9e8da-7553-434d-a095-71d453969917" />
       <Column Name="ParentCommentId" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="4239d1fa-7682-4a73-8bf1-c157de012906" />
       <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="f1e596f4-23d3-48b9-a21d-35229c6836ff" />
       <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="e2880805-4aa7-4e9e-a512-697fe5635332" />

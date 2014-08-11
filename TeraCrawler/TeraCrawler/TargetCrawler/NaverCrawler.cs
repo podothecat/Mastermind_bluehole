@@ -132,7 +132,6 @@ namespace TeraCrawler.TargetCrawler
             article.ContentHtml = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"postContent\"]")[0].InnerHtml.Trim();          
         }
 
-
         public override IEnumerable<Article> ParsePagingPage(string rawHtml)
         {
             var htmlDoc = new HtmlAgilityPack.HtmlDocument();
@@ -214,7 +213,20 @@ namespace TeraCrawler.TargetCrawler
                     comment.ContentHtml = node.SelectNodes("li[1]/div/div[2]/span")[0].InnerText;
                     comments.Add(comment);
                 }
-            }            
+            }
+        }
+
+        protected override IList<Comment> CrawlComments(Article article)
+        {
+            IList<Comment> comments = new List<Comment>();
+
+            var commentPages = MakeCommentPageAddresses(article);
+            foreach (var commentPage in commentPages)
+            {
+                ParseCommentPage(commentPage.CrawlIt(encoding, headerCollection, cookieContainer), ref comments);
+            }
+
+            return comments;
         }
     }
 }

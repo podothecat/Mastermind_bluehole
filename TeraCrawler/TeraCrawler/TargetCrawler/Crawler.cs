@@ -109,17 +109,11 @@ namespace TeraCrawler.TargetCrawler
                     
                     try
                     {
-                        comments = new List<Comment>();
-
                         var address = MakeArticlePageAddress(article.ArticleId);
                         article.RawHtml = address.CrawlIt(encoding, headerCollection, cookieContainer);
                         ParseArticlePage(article);
 
-                        var commentPages = MakeCommentPageAddresses(article);
-
-                        foreach (var commentPage in commentPages) {
-                            ParseCommentPage(commentPage.CrawlIt(encoding,headerCollection,cookieContainer), ref comments);
-                        }
+                        comments = CrawlComments(article);
 
                         using (var context = new TeraDataContext())
                         {
@@ -144,7 +138,9 @@ namespace TeraCrawler.TargetCrawler
         
         protected abstract string MakeArticlePageAddress(int articleId);
         public abstract void ParseArticlePage(Article article);
-        
+
+        protected abstract IList<Comment> CrawlComments(Article article);
+
         // article의 rawHtml으로부터 댓글 요청하는 페이지 주소를 가져온다. 별도로 ajax를 쓰거나 하지 않는다면  article의 주소를 그대로 넣어도 되겠지
         protected abstract IEnumerable<String> MakeCommentPageAddresses(Article article);
         // MakeCommentPageAddresses에서 가져온 주소를 요청하여 그 페이지에 있는 comment를 파싱해 ref comments로 리턴하면 된다.
