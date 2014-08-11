@@ -226,6 +226,11 @@ namespace TeraCrawler.TargetCrawler
                 ParseCommentPage(commentPage.CrawlIt(encoding, headerCollection, cookieContainer), ref comments);
             }
 
+            foreach (var comment in comments)
+            {
+                comment.ArticleId = article.ArticleAutoId;
+            }
+
             return comments;
         }
     }

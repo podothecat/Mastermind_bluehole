@@ -9,11 +9,11 @@
       <Column Name="CategoryId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="a2f2e2fd-be73-4e37-ad15-2b7e47708ef3" />
       <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="bc573129-02ab-447c-ad6e-10a5a597e9b2" />
       <Column Name="Link" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b7d326d6-c87c-4b99-87e1-3d68b44c1ec2" />
-      <Column Name="RawHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="5b255ddd-689b-4e6e-81e7-0519d8c40d63" />
+      <Column Name="RawHtml" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="True" ed:Guid="5b255ddd-689b-4e6e-81e7-0519d8c40d63" />
       <Column Name="CrawledTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="fbb3c46c-26de-481d-b285-906869113641" />
-      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
-      <Column Name="Title" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
-      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
+      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="2c4b85bf-8b91-4d5c-ab7c-369da3a90507" />
+      <Column Name="Title" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
+      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
       <Column Name="ArticleWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
     </Type>
   </Table>
@@ -23,8 +23,8 @@
       <Column Name="CommentId" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="e4b9e8da-7553-434d-a095-71d453969917" />
       <Column Name="ParentCommentId" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="4239d1fa-7682-4a73-8bf1-c157de012906" />
       <Column Name="ArticleId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="f1e596f4-23d3-48b9-a21d-35229c6836ff" />
-      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="e2880805-4aa7-4e9e-a512-697fe5635332" />
-      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="fbac55ef-34a5-4d02-bc89-6e7c498b0952" />
+      <Column Name="Author" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="e2880805-4aa7-4e9e-a512-697fe5635332" />
+      <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="fbac55ef-34a5-4d02-bc89-6e7c498b0952" />
       <Column Name="CommentWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="b0590257-2b58-4ecd-b227-bc9b06707cba" />
       <Column Name="LikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="53afc684-4ffb-476c-88c8-82ad07de3c76" />
       <Column Name="DislikeCount" Type="System.Int32" DbType="int(9) NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="72d28c17-c63d-41ef-8601-3dadfe220ff5" />
@@ -35,7 +35,7 @@
       <Column Name="LogId" Type="System.Int32" DbType="int(9) NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="True" ed:Guid="eab5d548-a1df-4cd6-8046-ab2870955948" />
       <Column Name="`TimeStamp`" Member="TimeStamp" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="8f922800-1e98-444e-af01-730e30290ce4" />
       <Column Name="LogType" Type="LogType" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="ab442243-6e6c-4c2b-981a-9b088693869a" />
-      <Column Name="Message" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="b1680683-b77b-4f22-b2d4-9f7d5bb83b91" />
+      <Column Name="Message" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="True" ed:Guid="b1680683-b77b-4f22-b2d4-9f7d5bb83b91" />
     </Type>
   </Table>
   <EnumType Name="TargetSites" Type="TargetSites" ed:Guid="7f5b696e-f917-4379-8c19-24e2a3b1fa51">

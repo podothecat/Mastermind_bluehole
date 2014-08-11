@@ -101,23 +101,31 @@ namespace TeraCrawler.TargetCrawler
         {
             while (ArticleQueueToCrawl.Count > 0)
             {
-                ThreadPool.QueueUserWorkItem(item =>
+                foreach (var item in ArticleQueueToCrawl)
+                    //ThreadPool.QueueUserWorkItem(item =>
                 {
                     Article article = null;
                     IList<Comment> comments = null;
-                    while (!ArticleQueueToCrawl.TryDequeue(out article)) {}
-                    
+                    while (!ArticleQueueToCrawl.TryDequeue(out article))
+                    {
+                    }
+
                     try
                     {
                         var address = MakeArticlePageAddress(article.ArticleId);
                         article.RawHtml = address.CrawlIt(encoding, headerCollection, cookieContainer);
+                        article.CrawledTime = DateTime.Now;
                         ParseArticlePage(article);
-
-                        comments = CrawlComments(article);
-
                         using (var context = new TeraDataContext())
                         {
+                            Console.WriteLine(context.Connection.ConnectionString);
                             context.Articles.InsertOnSubmit(article);
+                            context.SubmitChanges();
+                        }
+
+                        comments = CrawlComments(article);
+                        using (var context = new TeraDataContext())
+                        {
                             context.Comments.InsertAllOnSubmit(comments);
                             context.SubmitChanges();
                         }
@@ -128,7 +136,8 @@ namespace TeraCrawler.TargetCrawler
                         Logger.Log(ex);
                     }
 
-                }, ArticleQueueToCrawl);
+                    //}, ArticleQueueToCrawl);
+                }
             }
         }
 
