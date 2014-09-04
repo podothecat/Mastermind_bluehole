@@ -62,21 +62,27 @@ namespace Preprocessor
                         document.LoadHtml(article.ContentHtml);
                         var htmlCleanText = WebUtility.HtmlDecode(document.DocumentNode.InnerText).Trim();
 
-                        // nlp preprocessing
-                        workflow.analyze(htmlCleanText);
-
                         // result to xml document
                         var xDoc = new XDocument();
                         xDoc.Add(new XElement("Document"));
-                        foreach (var sentence in workflow.getResultOfDocument(new Sentence(0, 0, false)))
-                        {
-                            xDoc.Root.Add(new XElement(
-                                "Sentence",
-                                string.Join(
-                                    ",",
-                                    sentence.Eojeols.Where(e => e.length > 0).Select(e => string.Join(",", e.Morphemes.Where(t => t.Length > 0))))));
-                        }
 
+                        try
+                        {
+                            // nlp preprocessing
+                            workflow.analyze(htmlCleanText);
+                         
+                            foreach (var sentence in workflow.getResultOfDocument(new Sentence(0, 0, false)))
+                            {
+                                xDoc.Root.Add(new XElement(
+                                    "Sentence",
+                                    string.Join(
+                                        ",",
+                                        sentence.Eojeols.Where(e => e.length > 0).Select(e => string.Join(",", e.Morphemes.Where(t => t.Length > 0))))));
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
 
                         // update to database
                         article.Keywords = xDoc.ToString();
@@ -89,7 +95,6 @@ namespace Preprocessor
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception occurred during preprocessing Article Auto ID: {0}", lastWorkArticleId);
                 Logger.Log(ex);
             }
             finally
