@@ -10,6 +10,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using TeraCrawler;
 
 namespace Preprocessor
 {
@@ -18,15 +20,14 @@ namespace Preprocessor
         static void Main(string[] args)
         {
             var workflow = WorkflowFactory.getPredefinedWorkflow(WorkflowFactory.WORKFLOW_NOUN_EXTRACTOR);
-            
+            var lastWorkArticleId = 0;
+
             try
             {
                 workflow.activateWorkflow(true);
-                var processedArticleId = 0;
 
                 while (true)
                 {
-                    
                     using (var context = new TeraDataContext())
                     {
                         // initializing data
@@ -42,50 +43,54 @@ namespace Preprocessor
                         }
 
                         // get an article to work
-                        //var processedArticleId = context.CheckPoints.Where(e => e.AnalysisPhase == AnalysisPhase.Preprocess).First().ProcessedArticleId;
+                        var processedInfo = context.CheckPoints.Where(e => e.AnalysisPhase == AnalysisPhase.Preprocess).First();
 
                         // no article - Sleep thread
-                        if (!context.Articles.Any(e => e.ArticleAutoId > processedArticleId))
+                        if (!context.Articles.Any(e => e.ArticleAutoId > processedInfo.ProcessedArticleId))
                         {
+                            Logger.Log("All documents are preprocessed!");
                             Thread.Sleep(60 * 1000);
                             continue;
                         }
 
-                        var article = context.Articles.Where(e => e.ArticleAutoId > processedArticleId).OrderBy(e => e.ArticleAutoId).First();
+                        // fetch article
+                        var article = context.Articles.Where(e => e.ArticleAutoId > processedInfo.ProcessedArticleId).OrderBy(e => e.ArticleAutoId).First();
+                        lastWorkArticleId = article.ArticleAutoId;
 
+                        // clean up text
                         var document = new HtmlDocument();
                         document.LoadHtml(article.ContentHtml);
-
                         var htmlCleanText = WebUtility.HtmlDecode(document.DocumentNode.InnerText).Trim();
 
-                        Console.WriteLine(htmlCleanText);
-                        Console.WriteLine("=========== END OF DOCUMENT ============");
-
+                        // nlp preprocessing
                         workflow.analyze(htmlCleanText);
+
+                        // result to xml document
+                        var xDoc = new XDocument();
+                        xDoc.Add(new XElement("Document"));
                         foreach (var sentence in workflow.getResultOfDocument(new Sentence(0, 0, false)))
                         {
-                            foreach (var eojeol in sentence.Eojeols)
-                            {
-                                foreach (var morpheme in eojeol.Morphemes)
-                                {
-                                    Console.Write(morpheme);
-                                    Console.Write(" ");
-                                }
-                            }
+                            xDoc.Root.Add(new XElement(
+                                "Sentence",
+                                string.Join(
+                                    ",",
+                                    sentence.Eojeols.Where(e => e.length > 0).Select(e => string.Join(",", e.Morphemes.Where(t => t.Length > 0))))));
                         }
 
-                        Console.WriteLine();
-                        Console.WriteLine("=========== END OF MORPHEME ============");
 
-                        processedArticleId = article.ArticleAutoId;
+                        // update to database
+                        article.Keywords = xDoc.ToString();
+                        processedInfo.ProcessedArticleId = article.ArticleAutoId;
+
+                        context.SubmitChanges();
                     }
                 }
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.ToString());
-                return;
+                Logger.Log("Exception occurred during preprocessing Article Auto ID: {0}", lastWorkArticleId);
+                Logger.Log(ex);
             }
             finally
             {
