@@ -15,6 +15,7 @@
       <Column Name="Title" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="cc788271-3fef-485e-8792-71c6f92a07a7" />
       <Column Name="ContentHtml" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="6af640f2-3b98-4167-82ff-5eeaba880638" />
       <Column Name="ArticleWrittenTime" Type="System.DateTime" DbType="datetime NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="False" ed:Guid="7358b544-2a68-4b5c-a846-2387fc756ddc" />
+      <Column Name="Keywords" Type="System.String" DbType="longtext NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="False" ed:Guid="8fa195bd-a79b-4627-9b20-666d13e909ad" />
     </Type>
   </Table>
   <Table Name="mastermind.Comments" Member="Comments">
@@ -38,6 +39,12 @@
       <Column Name="Message" Type="System.String" DbType="longtext NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="True" ed:Guid="b1680683-b77b-4f22-b2d4-9f7d5bb83b91" />
     </Type>
   </Table>
+  <Table Name="mastermind.CheckPoints" Member="CheckPoints">
+    <Type Name="CheckPoint" ed:Guid="fcf501b0-8d84-45e8-ab4b-da76fc2335f7">
+      <Column Name="AnalysisPhase" Type="AnalysisPhase" DbType="int(9) NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" Unicode="true" ed:ValidateRequired="True" ed:Guid="42d725cd-e9b1-4034-99da-ce0de3ccc4be" />
+      <Column Name="ProcessedArticleId" Type="System.Int32" DbType="int(9) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="True" ed:Guid="905bdfb8-abf0-488f-b476-401fff771e2e" />
+    </Type>
+  </Table>
   <EnumType Name="TargetSites" Type="TargetSites" ed:Guid="7f5b696e-f917-4379-8c19-24e2a3b1fa51">
     <Member Name="hangame" ed:Guid="a3013ec1-7528-469f-983b-a83c5656cb5d" />
     <Member Name="inven" ed:Guid="3b9de7b8-5627-4c76-9a0c-66a255c3896f" />
@@ -51,5 +58,8 @@
   <EnumType Name="LogType" Type="LogType" ed:Guid="e28f0ec7-99f9-4664-9eff-5179544cdbea">
     <Member Name="Info" ed:Guid="47074490-2182-4ca4-bf02-b18788560ef5" />
     <Member Name="Exception" ed:Guid="322a188a-609c-4e43-b24e-8677f3b2e5f0" />
+  </EnumType>
+  <EnumType Name="AnalysisPhase" Type="AnalysisPhase" ed:Guid="ba877386-799c-45e2-9789-a2bedf96f769">
+    <Member Name="Preprocess" ed:Guid="c0eab514-520f-46ec-aaa8-725896575c42" />
   </EnumType>
 </Database>
