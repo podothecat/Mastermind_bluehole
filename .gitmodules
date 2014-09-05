@@ -1,0 +1,3 @@
+[submodule "NHanNanum"]
+	path = NHanNanum
+	url = https://github.com/stjeong/NHanNanum.git
