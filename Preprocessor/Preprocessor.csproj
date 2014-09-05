@@ -71,7 +71,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NHanNanum\NHanNanum\NHanNanum.csproj">
+    <ProjectReference Include="..\NHanNanum\NHanNanum\NHanNanum.csproj">
       <Project>{90781225-7cfe-4123-aea0-fcdccdd1c602}</Project>
       <Name>NHanNanum</Name>
     </ProjectReference>
