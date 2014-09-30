@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
-using DataContext;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,7 +58,7 @@ namespace TeraCrawler.TargetCrawler
 
         public void CollectArticleList()
         {
-            using (var context = new TeraDataContext())
+            using (var context = new TeraArticleDataContext())
             {
                 var jumpPagingSize = 1;
                 var address = MakePagingPageAddress(CurrentWorkingPage);
@@ -116,14 +115,14 @@ namespace TeraCrawler.TargetCrawler
                         article.RawHtml = address.CrawlIt(encoding, headerCollection, cookieContainer);
                         article.CrawledTime = DateTime.Now;
                         ParseArticlePage(article);
-                        using (var context = new TeraDataContext())
+                        using (var context = new TeraArticleDataContext())
                         {
                             context.Articles.InsertOnSubmit(article);
                             context.SubmitChanges();
                         }
 
                         comments = CrawlComments(article);
-                        using (var context = new TeraDataContext())
+                        using (var context = new TeraArticleDataContext())
                         {
                             context.Comments.InsertAllOnSubmit(comments);
                             context.SubmitChanges();

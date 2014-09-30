@@ -1,9 +1,9 @@
-﻿using DataContext;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 namespace TeraCrawler
 {
     public static class Logger
@@ -37,12 +37,13 @@ namespace TeraCrawler
             var timeStamp = DateTime.Now;
             var formattedMessage = string.Format("[{0}] {1}", timeStamp.ToString("HH:mm:ss"), message);
             Console.WriteLine(formattedMessage);
-            using (var context = new TeraDataContext())
+
+            using (var context = new TeraArticleDataContext())
             {
                 context.Logs.InsertOnSubmit(new Log
                 {
                     TimeStamp = timeStamp,
-                    LogType = logType,
+                    LogType = (int)logType,
                     Message = message,
                 });
                 context.SubmitChanges();

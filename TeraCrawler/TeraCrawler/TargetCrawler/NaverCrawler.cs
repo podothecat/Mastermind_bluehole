@@ -1,5 +1,4 @@
-﻿using DataContext;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -151,8 +150,8 @@ namespace TeraCrawler.TargetCrawler
 
                 var article = new Article
                 {
-                    Game = Games.tera,
-                    TargetSite = TargetSites.naver,
+                    Game = (int)Games.tera,
+                    TargetSite = (int)TargetSites.naver,
                     CategoryId = CategoryId,
                     ArticleId = articleId,
                     Link = link,

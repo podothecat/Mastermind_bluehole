@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
-using DataContext;
 using HtmlAgilityPack;
 using System.Net;
 using System.IO;
@@ -56,8 +55,8 @@ namespace TeraCrawler.TargetCrawler
 
                 var article = new Article
                 {
-                    Game = Games.tera,
-                    TargetSite = TargetSites.inven,
+                    Game = (int)Games.tera,
+                    TargetSite = (int)TargetSites.inven,
                     CategoryId = CategoryId,
                     ArticleId = articleId,
                     Link = link,
