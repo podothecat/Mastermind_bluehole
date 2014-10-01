@@ -30,9 +30,6 @@ namespace TeraCrawler
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertArticle(Article instance);
-    partial void UpdateArticle(Article instance);
-    partial void DeleteArticle(Article instance);
     partial void InsertLog(Log instance);
     partial void UpdateLog(Log instance);
     partial void DeleteLog(Log instance);
@@ -42,6 +39,9 @@ namespace TeraCrawler
     partial void InsertComment(Comment instance);
     partial void UpdateComment(Comment instance);
     partial void DeleteComment(Comment instance);
+    partial void InsertArticle(Article instance);
+    partial void UpdateArticle(Article instance);
+    partial void DeleteArticle(Article instance);
     #endregion
 		
 		public TeraArticleDataContext() : 
@@ -74,14 +74,6 @@ namespace TeraCrawler
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Article> Articles
-		{
-			get
-			{
-				return this.GetTable<Article>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Log> Logs
 		{
 			get
@@ -105,354 +97,12 @@ namespace TeraCrawler
 				return this.GetTable<Comment>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Articles")]
-	public partial class Article : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ArticleAutoId;
-		
-		private int _Game;
-		
-		private int _TargetSite;
-		
-		private int _CategoryId;
-		
-		private int _ArticleId;
-		
-		private string _Link;
-		
-		private string _RawHtml;
-		
-		private System.DateTime _CrawledTime;
-		
-		private string _Author;
-		
-		private string _Title;
-		
-		private string _ContentHtml;
-		
-		private System.Nullable<System.DateTime> _ArticleWrittenTime;
-		
-		private string _Keywords;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnArticleAutoIdChanging(int value);
-    partial void OnArticleAutoIdChanged();
-    partial void OnGameChanging(int value);
-    partial void OnGameChanged();
-    partial void OnTargetSiteChanging(int value);
-    partial void OnTargetSiteChanged();
-    partial void OnCategoryIdChanging(int value);
-    partial void OnCategoryIdChanged();
-    partial void OnArticleIdChanging(int value);
-    partial void OnArticleIdChanged();
-    partial void OnLinkChanging(string value);
-    partial void OnLinkChanged();
-    partial void OnRawHtmlChanging(string value);
-    partial void OnRawHtmlChanged();
-    partial void OnCrawledTimeChanging(System.DateTime value);
-    partial void OnCrawledTimeChanged();
-    partial void OnAuthorChanging(string value);
-    partial void OnAuthorChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnContentHtmlChanging(string value);
-    partial void OnContentHtmlChanged();
-    partial void OnArticleWrittenTimeChanging(System.Nullable<System.DateTime> value);
-    partial void OnArticleWrittenTimeChanged();
-    partial void OnKeywordsChanging(string value);
-    partial void OnKeywordsChanged();
-    #endregion
-		
-		public Article()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleAutoId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ArticleAutoId
+		public System.Data.Linq.Table<Article> Articles
 		{
 			get
 			{
-				return this._ArticleAutoId;
-			}
-			set
-			{
-				if ((this._ArticleAutoId != value))
-				{
-					this.OnArticleAutoIdChanging(value);
-					this.SendPropertyChanging();
-					this._ArticleAutoId = value;
-					this.SendPropertyChanged("ArticleAutoId");
-					this.OnArticleAutoIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Game", DbType="Int NOT NULL")]
-		public int Game
-		{
-			get
-			{
-				return this._Game;
-			}
-			set
-			{
-				if ((this._Game != value))
-				{
-					this.OnGameChanging(value);
-					this.SendPropertyChanging();
-					this._Game = value;
-					this.SendPropertyChanged("Game");
-					this.OnGameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetSite", DbType="Int NOT NULL")]
-		public int TargetSite
-		{
-			get
-			{
-				return this._TargetSite;
-			}
-			set
-			{
-				if ((this._TargetSite != value))
-				{
-					this.OnTargetSiteChanging(value);
-					this.SendPropertyChanging();
-					this._TargetSite = value;
-					this.SendPropertyChanged("TargetSite");
-					this.OnTargetSiteChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryId", DbType="Int NOT NULL")]
-		public int CategoryId
-		{
-			get
-			{
-				return this._CategoryId;
-			}
-			set
-			{
-				if ((this._CategoryId != value))
-				{
-					this.OnCategoryIdChanging(value);
-					this.SendPropertyChanging();
-					this._CategoryId = value;
-					this.SendPropertyChanged("CategoryId");
-					this.OnCategoryIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleId", DbType="Int NOT NULL")]
-		public int ArticleId
-		{
-			get
-			{
-				return this._ArticleId;
-			}
-			set
-			{
-				if ((this._ArticleId != value))
-				{
-					this.OnArticleIdChanging(value);
-					this.SendPropertyChanging();
-					this._ArticleId = value;
-					this.SendPropertyChanged("ArticleId");
-					this.OnArticleIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Link", DbType="NVarChar(4000) NOT NULL", CanBeNull=false)]
-		public string Link
-		{
-			get
-			{
-				return this._Link;
-			}
-			set
-			{
-				if ((this._Link != value))
-				{
-					this.OnLinkChanging(value);
-					this.SendPropertyChanging();
-					this._Link = value;
-					this.SendPropertyChanged("Link");
-					this.OnLinkChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RawHtml", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string RawHtml
-		{
-			get
-			{
-				return this._RawHtml;
-			}
-			set
-			{
-				if ((this._RawHtml != value))
-				{
-					this.OnRawHtmlChanging(value);
-					this.SendPropertyChanging();
-					this._RawHtml = value;
-					this.SendPropertyChanged("RawHtml");
-					this.OnRawHtmlChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CrawledTime", DbType="DateTime2 NOT NULL")]
-		public System.DateTime CrawledTime
-		{
-			get
-			{
-				return this._CrawledTime;
-			}
-			set
-			{
-				if ((this._CrawledTime != value))
-				{
-					this.OnCrawledTimeChanging(value);
-					this.SendPropertyChanging();
-					this._CrawledTime = value;
-					this.SendPropertyChanged("CrawledTime");
-					this.OnCrawledTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Author", DbType="NVarChar(4000)")]
-		public string Author
-		{
-			get
-			{
-				return this._Author;
-			}
-			set
-			{
-				if ((this._Author != value))
-				{
-					this.OnAuthorChanging(value);
-					this.SendPropertyChanging();
-					this._Author = value;
-					this.SendPropertyChanged("Author");
-					this.OnAuthorChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(4000)")]
-		public string Title
-		{
-			get
-			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContentHtml", DbType="Text", UpdateCheck=UpdateCheck.Never)]
-		public string ContentHtml
-		{
-			get
-			{
-				return this._ContentHtml;
-			}
-			set
-			{
-				if ((this._ContentHtml != value))
-				{
-					this.OnContentHtmlChanging(value);
-					this.SendPropertyChanging();
-					this._ContentHtml = value;
-					this.SendPropertyChanged("ContentHtml");
-					this.OnContentHtmlChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleWrittenTime", DbType="DateTime2")]
-		public System.Nullable<System.DateTime> ArticleWrittenTime
-		{
-			get
-			{
-				return this._ArticleWrittenTime;
-			}
-			set
-			{
-				if ((this._ArticleWrittenTime != value))
-				{
-					this.OnArticleWrittenTimeChanging(value);
-					this.SendPropertyChanging();
-					this._ArticleWrittenTime = value;
-					this.SendPropertyChanged("ArticleWrittenTime");
-					this.OnArticleWrittenTimeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Keywords", DbType="NVarChar(4000)")]
-		public string Keywords
-		{
-			get
-			{
-				return this._Keywords;
-			}
-			set
-			{
-				if ((this._Keywords != value))
-				{
-					this.OnKeywordsChanging(value);
-					this.SendPropertyChanging();
-					this._Keywords = value;
-					this.SendPropertyChanged("Keywords");
-					this.OnKeywordsChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this.GetTable<Article>();
 			}
 		}
 	}
@@ -906,6 +556,356 @@ namespace TeraCrawler
 					this._DislikeCount = value;
 					this.SendPropertyChanged("DislikeCount");
 					this.OnDislikeCountChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Articles")]
+	public partial class Article : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ArticleAutoId;
+		
+		private int _Game;
+		
+		private int _TargetSite;
+		
+		private int _CategoryId;
+		
+		private int _ArticleId;
+		
+		private string _Link;
+		
+		private string _RawHtml;
+		
+		private System.DateTime _CrawledTime;
+		
+		private string _Author;
+		
+		private string _Title;
+		
+		private string _ContentHtml;
+		
+		private System.Nullable<System.DateTime> _ArticleWrittenTime;
+		
+		private string _Keywords;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnArticleAutoIdChanging(int value);
+    partial void OnArticleAutoIdChanged();
+    partial void OnGameChanging(int value);
+    partial void OnGameChanged();
+    partial void OnTargetSiteChanging(int value);
+    partial void OnTargetSiteChanged();
+    partial void OnCategoryIdChanging(int value);
+    partial void OnCategoryIdChanged();
+    partial void OnArticleIdChanging(int value);
+    partial void OnArticleIdChanged();
+    partial void OnLinkChanging(string value);
+    partial void OnLinkChanged();
+    partial void OnRawHtmlChanging(string value);
+    partial void OnRawHtmlChanged();
+    partial void OnCrawledTimeChanging(System.DateTime value);
+    partial void OnCrawledTimeChanged();
+    partial void OnAuthorChanging(string value);
+    partial void OnAuthorChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnContentHtmlChanging(string value);
+    partial void OnContentHtmlChanged();
+    partial void OnArticleWrittenTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnArticleWrittenTimeChanged();
+    partial void OnKeywordsChanging(string value);
+    partial void OnKeywordsChanged();
+    #endregion
+		
+		public Article()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleAutoId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ArticleAutoId
+		{
+			get
+			{
+				return this._ArticleAutoId;
+			}
+			set
+			{
+				if ((this._ArticleAutoId != value))
+				{
+					this.OnArticleAutoIdChanging(value);
+					this.SendPropertyChanging();
+					this._ArticleAutoId = value;
+					this.SendPropertyChanged("ArticleAutoId");
+					this.OnArticleAutoIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Game", DbType="Int NOT NULL")]
+		public int Game
+		{
+			get
+			{
+				return this._Game;
+			}
+			set
+			{
+				if ((this._Game != value))
+				{
+					this.OnGameChanging(value);
+					this.SendPropertyChanging();
+					this._Game = value;
+					this.SendPropertyChanged("Game");
+					this.OnGameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TargetSite", DbType="Int NOT NULL")]
+		public int TargetSite
+		{
+			get
+			{
+				return this._TargetSite;
+			}
+			set
+			{
+				if ((this._TargetSite != value))
+				{
+					this.OnTargetSiteChanging(value);
+					this.SendPropertyChanging();
+					this._TargetSite = value;
+					this.SendPropertyChanged("TargetSite");
+					this.OnTargetSiteChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryId", DbType="Int NOT NULL")]
+		public int CategoryId
+		{
+			get
+			{
+				return this._CategoryId;
+			}
+			set
+			{
+				if ((this._CategoryId != value))
+				{
+					this.OnCategoryIdChanging(value);
+					this.SendPropertyChanging();
+					this._CategoryId = value;
+					this.SendPropertyChanged("CategoryId");
+					this.OnCategoryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleId", DbType="Int NOT NULL")]
+		public int ArticleId
+		{
+			get
+			{
+				return this._ArticleId;
+			}
+			set
+			{
+				if ((this._ArticleId != value))
+				{
+					this.OnArticleIdChanging(value);
+					this.SendPropertyChanging();
+					this._ArticleId = value;
+					this.SendPropertyChanged("ArticleId");
+					this.OnArticleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Link", DbType="NVarChar(4000) NOT NULL", CanBeNull=false)]
+		public string Link
+		{
+			get
+			{
+				return this._Link;
+			}
+			set
+			{
+				if ((this._Link != value))
+				{
+					this.OnLinkChanging(value);
+					this.SendPropertyChanging();
+					this._Link = value;
+					this.SendPropertyChanged("Link");
+					this.OnLinkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RawHtml", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string RawHtml
+		{
+			get
+			{
+				return this._RawHtml;
+			}
+			set
+			{
+				if ((this._RawHtml != value))
+				{
+					this.OnRawHtmlChanging(value);
+					this.SendPropertyChanging();
+					this._RawHtml = value;
+					this.SendPropertyChanged("RawHtml");
+					this.OnRawHtmlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CrawledTime", DbType="DateTime2 NOT NULL")]
+		public System.DateTime CrawledTime
+		{
+			get
+			{
+				return this._CrawledTime;
+			}
+			set
+			{
+				if ((this._CrawledTime != value))
+				{
+					this.OnCrawledTimeChanging(value);
+					this.SendPropertyChanging();
+					this._CrawledTime = value;
+					this.SendPropertyChanged("CrawledTime");
+					this.OnCrawledTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Author", DbType="NVarChar(4000)")]
+		public string Author
+		{
+			get
+			{
+				return this._Author;
+			}
+			set
+			{
+				if ((this._Author != value))
+				{
+					this.OnAuthorChanging(value);
+					this.SendPropertyChanging();
+					this._Author = value;
+					this.SendPropertyChanged("Author");
+					this.OnAuthorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(4000)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContentHtml", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		public string ContentHtml
+		{
+			get
+			{
+				return this._ContentHtml;
+			}
+			set
+			{
+				if ((this._ContentHtml != value))
+				{
+					this.OnContentHtmlChanging(value);
+					this.SendPropertyChanging();
+					this._ContentHtml = value;
+					this.SendPropertyChanged("ContentHtml");
+					this.OnContentHtmlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleWrittenTime", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> ArticleWrittenTime
+		{
+			get
+			{
+				return this._ArticleWrittenTime;
+			}
+			set
+			{
+				if ((this._ArticleWrittenTime != value))
+				{
+					this.OnArticleWrittenTimeChanging(value);
+					this.SendPropertyChanging();
+					this._ArticleWrittenTime = value;
+					this.SendPropertyChanged("ArticleWrittenTime");
+					this.OnArticleWrittenTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Keywords", DbType="Text", UpdateCheck=UpdateCheck.Never)]
+		public string Keywords
+		{
+			get
+			{
+				return this._Keywords;
+			}
+			set
+			{
+				if ((this._Keywords != value))
+				{
+					this.OnKeywordsChanging(value);
+					this.SendPropertyChanging();
+					this._Keywords = value;
+					this.SendPropertyChanged("Keywords");
+					this.OnKeywordsChanged();
 				}
 			}
 		}
