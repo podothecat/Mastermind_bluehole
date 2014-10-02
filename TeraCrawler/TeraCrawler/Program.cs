@@ -27,11 +27,19 @@ namespace TeraCrawler
             var targetSite = (TargetSites)Enum.Parse(typeof (TargetSites), args[1]);
             var categoryId = int.Parse(args[2]);
 
+            var articleCount = 0;
+            var sameCountCounter = 0;
             var crawler = Crawler.Get(targetSite, categoryId);
             while(true)
             {
                 try
                 {
+                    if (sameCountCounter == 10)
+                    {
+                        sameCountCounter = 0;
+                        crawler.Reset();
+                    }
+
                     crawler.CollectArticleList();
                     crawler.CrawlArticles();
                 }
@@ -41,6 +49,13 @@ namespace TeraCrawler
                 }
 
                 Thread.Sleep(5000);
+
+                using (var context = new TeraArticleDataContext())
+                {
+                    var count = context.Articles.Count();
+                    if (articleCount == count) sameCountCounter++;
+                    articleCount = count;
+                }
             }
         }
     }

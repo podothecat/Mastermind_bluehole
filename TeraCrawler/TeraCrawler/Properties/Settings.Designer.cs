@@ -27,7 +27,7 @@ namespace TeraCrawler.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=mastermind;Initial Catalog=mastermind;Persist Security Info=True;User" +
-            " ID=sa;Password=sa")]
+            " ID=sa;Password=sa_password_in_here")]
         public string mastermindConnectionString {
             get {
                 return ((string)(this["mastermindConnectionString"]));

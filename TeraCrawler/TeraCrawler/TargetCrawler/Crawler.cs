@@ -24,6 +24,11 @@ namespace TeraCrawler.TargetCrawler
         internal int CurrentWorkingPage = 1;
         internal ConcurrentQueue<Article> ArticleQueueToCrawl = new ConcurrentQueue<Article>();
 
+        internal void Reset()
+        {
+            CurrentWorkingPage = 1;
+        }
+
         #region Generate
         public static Crawler Get(TargetSites target, int categoryId)
         {
@@ -152,7 +157,6 @@ namespace TeraCrawler.TargetCrawler
         protected abstract IEnumerable<String> MakeCommentPageAddresses(Article article);
         // MakeCommentPageAddresses에서 가져온 주소를 요청하여 그 페이지에 있는 comment를 파싱해 ref comments로 리턴하면 된다.
         public abstract void ParseCommentPage(String commentPageRawHtml, ref IList<Comment> comments);
-        
     }
 
     public static class CrawlHelper
