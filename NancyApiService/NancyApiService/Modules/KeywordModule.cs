@@ -34,7 +34,7 @@ namespace NancyApiService
                         .First());
             };
 
-            Get["/test"] = _ =>
+            Get["/"] = _ =>
             {
                 return View["Keywords.html"];
             };
