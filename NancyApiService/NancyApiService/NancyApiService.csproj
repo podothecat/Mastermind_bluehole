@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\css\site.css" />
     <Content Include="Content\js\bootstrap-datetimepicker.min.js" />
     <Content Include="Content\js\keywordApp.js" />
     <Content Include="views\tera\Keyword\Keywords.html" />

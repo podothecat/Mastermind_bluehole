@@ -59,7 +59,7 @@ namespace NancyApiService
                         .Where(e => e.Contains("/"))
                         .Select(e => new { Word = e.Split('/')[0], Tag = e.Split('/')[1], })
                         .Where(e => e.Word.Length > 1)
-                        .Select(e => e.Word + "/" + e.Tag)
+                        .Select(e => (e.Tag[0] == 'V' ? e.Word + "다" : e.Word))
                         .Distinct();
 
                     foreach (var keyword in keywordList)

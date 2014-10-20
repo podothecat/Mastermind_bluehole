@@ -1,19 +1,10 @@
 ﻿var keywordApp = angular.module('keywordApp', []);
 
 keywordApp.controller('KeywordController', function ($scope, KeywordService) {
-    $scope.Keywords = [
-        { "Key": "나오/VV", "Value": 77 },
-        { "Key": "엘카/NN", "Value": 71 },
-        { "Key": "생각/NN", "Value": 56 },
-        { "Key": "정도/NN", "Value": 55 },
-        { "Key": "오르/NN", "Value": 55 },
-        { "Key": "사람/NN", "Value": 54 },
-        { "Key": "모르/VV", "Value": 51 },
-        { "Key": "무기/NN", "Value": 50 }
-    ];
+    $scope.Keywords = [];
 
     $scope.beginDate = "";
-    $scope.endDate ="";
+    $scope.endDate = "";
 
     $scope.getKeywords = function() {
         console.log("called");

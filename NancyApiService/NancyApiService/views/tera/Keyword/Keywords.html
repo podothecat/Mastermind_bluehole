@@ -6,13 +6,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css" />
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Tahoma, 맑은 고딕, Geneva, sans-serif;
-            _font-family: 맑은 고딕, Tahoma, Geneva, sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" />
+    <link rel="stylesheet" href="/Content/css/site.css"/>
+
     <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -68,13 +64,24 @@
     </div>
     
     <div class='container'>
-        <p>여기에 Keyword list를 보여보자!</p>
-        <ul class='list-group'>
-        <li class='list-group-item' ng-repeat="keyword in Keywords">
-            <span class="badge">{{ keyword.Value }}</span>
-            {{ keyword.Key }}
-        </li>
-            </ul>
+        <div class="row">
+            <div class="col-md-2">
+                <ul>
+                    <li ng-repeat="keyword in Keywords">
+                        <span class="badge">{{ keyword.Value }}</span>
+                        {{ keyword.Key }}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <b><font color="green">NAVER</font></b>
+                </div>
+                <div class="row">
+                    <b><font color="white">inven</font></b>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

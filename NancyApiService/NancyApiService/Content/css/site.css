@@ -1,0 +1,10 @@
+﻿body {
+    font-family: Tahoma, 맑은 고딕, Geneva, sans-serif;
+    _font-family: 맑은 고딕, Tahoma, Geneva, sans-serif;
+    background-color: black;
+    color: whitesmoke;
+}
+
+.keyword {
+    font-size: 20px;
+}
