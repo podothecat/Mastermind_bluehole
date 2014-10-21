@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html ng-app="keywordApp">
+<head>
+    <meta charset="UTF-8" />
+    <title>Test Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" />
+    <link rel="stylesheet" href="/Content/css/site.css"/>
+
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/src/js/bootstrap-datetimepicker.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+    <script src="/Content/js/keywordApp.js"></script>
+</head>
+<body ng-controller="KeywordController">
+    <div class="container">
+        <div class="page-header">
+            <h1>Mastermind</h1>
+            <p>인벤 및 네이버 데이터를 활용한 사용자 반응 확인하기</p>
+        </div>
+        <div class="row">
+            <div class='col-sm-3'>
+                <div class="form-group">
+                    <div class='input-group' id='keyword'>
+                        <span class="input-group-addon">Keyword</span>
+                        <input type='text' class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-3'>
+                <div class="form-group">
+                    <div class='input-group date' id='beginDate'>
+                        <span class="input-group-addon">Begin Date</span>
+                        <input type='text' class="form-control" data-date-format="YYYY-MM-DD hh:mm:ss"/>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-3'>
+                <div class="form-group">
+                    <div class='input-group date' id='endDate'>
+                        <span class="input-group-addon">End Date</span>
+                        <input type='text' class="form-control" data-date-format="YYYY-MM-DD hh:mm:ss"/>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-3' align='right'>
+                <button type="button" class="btn btn-primary" ng-click="getKeywords()">Search</button>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $('#beginDate').datetimepicker();
+                    $('#endDate').datetimepicker();
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class='container'>
+        <p></p>
+    </div>
+    
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-2">
+                <ul>
+                    <li ng-repeat="keyword in Keywords">
+                        <span class="badge">{{ keyword.Value }}</span>
+                        {{ keyword.Key }}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <b><font color="green">NAVER</font></b>
+                </div>
+                <div class="row">
+                    <b><font color="white">inven</font></b>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
-using DataContext;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +23,11 @@ namespace TeraCrawler.TargetCrawler
 
         internal int CurrentWorkingPage = 1;
         internal ConcurrentQueue<Article> ArticleQueueToCrawl = new ConcurrentQueue<Article>();
+
+        internal void Reset()
+        {
+            CurrentWorkingPage = 1;
+        }
 
         #region Generate
         public static Crawler Get(TargetSites target, int categoryId)
@@ -59,7 +63,7 @@ namespace TeraCrawler.TargetCrawler
 
         public void CollectArticleList()
         {
-            using (var context = new TeraDataContext())
+            using (var context = new TeraArticleDataContext())
             {
                 var jumpPagingSize = 1;
                 var address = MakePagingPageAddress(CurrentWorkingPage);
@@ -116,14 +120,14 @@ namespace TeraCrawler.TargetCrawler
                         article.RawHtml = address.CrawlIt(encoding, headerCollection, cookieContainer);
                         article.CrawledTime = DateTime.Now;
                         ParseArticlePage(article);
-                        using (var context = new TeraDataContext())
+                        using (var context = new TeraArticleDataContext())
                         {
                             context.Articles.InsertOnSubmit(article);
                             context.SubmitChanges();
                         }
 
                         comments = CrawlComments(article);
-                        using (var context = new TeraDataContext())
+                        using (var context = new TeraArticleDataContext())
                         {
                             context.Comments.InsertAllOnSubmit(comments);
                             context.SubmitChanges();
@@ -153,7 +157,6 @@ namespace TeraCrawler.TargetCrawler
         protected abstract IEnumerable<String> MakeCommentPageAddresses(Article article);
         // MakeCommentPageAddresses에서 가져온 주소를 요청하여 그 페이지에 있는 comment를 파싱해 ref comments로 리턴하면 된다.
         public abstract void ParseCommentPage(String commentPageRawHtml, ref IList<Comment> comments);
-        
     }
 
     public static class CrawlHelper
